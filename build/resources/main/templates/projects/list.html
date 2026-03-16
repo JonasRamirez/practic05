@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mocky | Proyectos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen flex">
+
+<aside class="w-64 bg-slate-200 p-6 flex flex-col justify-between">
+
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-8">
+            Mocky
+        </h1>
+
+        <nav class="space-y-3">
+            <a th:href="@{/projects}" th:text="#{menu.projects}"
+               class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-300">
+            </a>
+
+            <a th:href="@{/mocks/new}" th:text="#{menu.newMock}"
+               class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-300">
+            </a>
+
+            <a th:if="${isAdmin}"
+               th:href="@{/admin/users-view}" th:text="#{menu.users}"
+               class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-300">
+            </a>
+        </nav>
+    </div>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" th:text="#{menu.logout}"
+                class="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        </button>
+    </form>
+</aside>
+
+<main class="flex-1 p-8 overflow-y-auto">
+
+    <h2 class="text-3xl font-bold text-slate-800 mb-6" th:text="#{list-proyect.title}">
+    </h2>
+
+    <div class="space-y-4">
+
+        <details th:each="project : ${projects}"
+                 class="bg-white rounded-lg shadow p-5 relative">
+
+            <summary class="cursor-pointer list-none">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <a th:href="@{/projects/{id}(id=${project.id})}"
+                           class="text-xl font-bold text-slate-800 hover:text-indigo-600 hover:underline"
+                           th:text="${project.name}">
+                        </a>
+
+
+                        <p class="text-sm text-slate-500">
+                            User:
+                            <span th:text="${project.owner.username}"></span>
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm text-indigo-600 font-semibold">
+                            <span th:text="${#lists.size(project.mocks)}"></span> mocks
+                        </span>
+
+                        <form th:action="@{/projects/{id}/delete(id=${project.id})}"
+                              method="post"
+                              onsubmit="return confirm('Eliminar el proyecto y TODOS sus mocks?');">
+                            <button type="submit"
+                                    class="flex items-center gap-1 text-red-600 hover:underline text-xs">
+                                <img src="/icons/trash.png" class="w-4 h-4"/>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </summary>
+
+            <div class="mt-4 border-t pt-4 space-y-3">
+
+                <div th:if="${#lists.isEmpty(project.mocks)}"
+                     class="text-sm text-slate-500" th:text="#{list-proyect.noMocks}">
+                </div>
+
+                <div th:each="mock : ${project.mocks}"
+                     class="bg-slate-50 rounded-lg p-3 flex justify-between items-center">
+
+                    <div class="flex gap-3 items-center">
+                        <span th:switch="${mock.method}"
+                              class="px-2 py-1 rounded text-xs font-bold">
+
+                            <span th:case="'GET'"
+                                  class="bg-green-200 text-green-800"
+                                  th:text="${mock.method}"></span>
+
+                            <span th:case="'POST'"
+                                  class="bg-blue-200 text-blue-800"
+                                  th:text="${mock.method}"></span>
+
+                            <span th:case="'PUT'"
+                                  class="bg-yellow-200 text-yellow-800"
+                                  th:text="${mock.method}"></span>
+
+                            <span th:case="'DELETE'"
+                                  class="bg-red-200 text-red-800"
+                                  th:text="${mock.method}"></span>
+
+                            <span th:case="*"
+                                  class="bg-purple-200 text-purple-800"
+                                  th:text="${mock.method}"></span>
+                        </span>
+
+                        <code class="text-sm text-slate-700"
+                              th:text="'http://localhost:7001'+${mock.path}"></code>
+                    </div>
+
+                    <div class="flex items-center gap-4 text-xs text-slate-600">
+
+                        <span>Status <b th:text="${mock.statusCode}"></b></span>
+                        <span th:text="${mock.contentType}"></span>
+                        <span>Delay <b th:text="${mock.delaySeconds}"></b>s</span>
+
+                        <button type="button"
+                                class="text-indigo-600 hover:underline"
+                                th:attr="data-path=${mock.path}"
+                                th:text="#{copy.url}"
+                                onclick="copyUrl(this)">
+                        </button>
+
+                        <a th:href="@{/mocks/{id}/edit(id=${mock.id})}"
+                           class="flex items-center gap-1 text-indigo-600 hover:underline text-xs">
+                            <img src="/icons/edit.png" class="w-4 h-4"/>
+                        </a>
+
+                        <form th:action="@{/mocks/{id}/delete(id=${mock.id})}"
+                              method="post"
+                              onsubmit="return confirm('¿Eliminar este mock?');">
+                            <button type="submit"
+                                    class="flex items-center gap-1 text-red-600 hover:underline text-xs">
+                                <img src="/icons/trash.png" class="w-4 h-4"/>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </details>
+
+        <div th:if="${#lists.isEmpty(projects)}"
+             class="text-center text-slate-500 py-12" th:text="#{list-proyect.empty}">
+        </div>
+
+    </div>
+</main>
+
+<script>
+    function copyUrl(button) {
+        const path = button.getAttribute("data-path");
+        const url = "http://localhost:7001" + path;
+
+        navigator.clipboard.writeText(url).then(() => {
+            button.innerText = "#{copy.done}";
+            setTimeout(() => button.innerText = "#{copy.url}", 1500);
+        });
+    }
+</script>
+
+</body>
+</html>
