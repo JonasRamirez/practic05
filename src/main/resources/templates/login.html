@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="es"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="#{login.title}">Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-[#403e53] relative overflow-hidden">
+
+<div class="absolute inset-0 bg-center bg-no-repeat opacity-[0.01]"
+     style="background-image:url('https://media1.tenor.com/m/QFe1FmZ_jLoAAAAd/cube-cat.gif')">
+</div>
+
+<div class="relative bg-[#323232] text-white p-10 rounded-lg shadow-lg w-full max-w-md">
+
+    <h2 class="text-2xl font-bold text-center mb-6"
+        th:text="#{login.header}">
+        Iniciar Sesión
+    </h2>
+
+    <div th:if="${param.error}"
+         class="mb-4 text-red-400 text-sm text-center"
+         th:text="#{login.error}">
+        Usuario o contraseña incorrectos
+    </div>
+
+    <div th:if="${param.logout}"
+         class="mb-4 text-green-400 text-sm text-center"
+         th:text="#{login.logout}">
+        Sesión cerrada correctamente
+    </div>
+
+    <form th:action="@{/login}" method="post" class="space-y-5">
+
+        <div>
+            <label class="block font-semibold mb-1"
+                   th:text="#{login.username}">
+                Usuario
+            </label>
+            <input type="text"
+                   name="username"
+                   required
+                   th:placeholder="#{login.username.placeholder}"
+                   class="w-full px-3 py-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-green-400"/>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1"
+                   th:text="#{login.password}">
+                Contraseña
+            </label>
+            <input type="password"
+                   name="password"
+                   required
+                   th:placeholder="#{login.password.placeholder}"
+                   class="w-full px-3 py-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-green-400"/>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-[#63a37c] hover:bg-[#4e8276] transition-colors text-white py-2 rounded-lg font-semibold">
+            <span th:text="#{login.submit}">Entrar</span>
+        </button>
+
+    </form>
+
+
+</div>
+
+</body>
+</html>

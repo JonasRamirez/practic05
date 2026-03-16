@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: oscarfonts/h2
+    restart: unless-stopped
+    environment:
+      H2_OPTIONS: "-tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists -web -webAllowOthers -webPort 81 -baseDir /opt/h2-data"
+    volumes:
+      - ./data/h2:/opt/h2-data
+    networks:
+      - practica5-net
+
+  app1:
+    build: .
+    environment:
+      APP_PORT: 8080
+      INSTANCE_ID: app1
+      APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
+      APP_DB_DRIVER: org.h2.Driver
+      APP_DB_USERNAME: admin
+      APP_DB_PASSWORD: se
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - practica5-net
+
+  app2:
+    build: .
+    environment:
+      INSTANCE_ID: app2
+      APP_PORT: 8080
+      APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
+      APP_DB_DRIVER: org.h2.Driver
+      APP_DB_USERNAME: admin
+      APP_DB_PASSWORD: se
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+    networks:
+      - practica5-net
+
+  app3:
+    build: .
+    environment:
+      INSTANCE_ID: app3
+      APP_PORT: 8080
+      APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
+      APP_DB_DRIVER: org.h2.Driver
+      APP_DB_USERNAME: admin
+      APP_DB_PASSWORD: se
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db
+    networks:
+      - practica5-net
+
+  haproxy:
+      image: haproxy:latest
+      container_name: practica5-haproxy
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+        - ./certs:/etc/ssl/private
+      depends_on:
+        - app1
+        - app2
+        - app3
+      networks:
+        - practica5-net
+
+networks:
+  practica5-net:

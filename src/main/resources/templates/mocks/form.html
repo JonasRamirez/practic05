@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mocky | Nuevo Mock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+<div class="max-w-4xl mx-auto p-6">
+
+    <h1 class="text-2xl font-bold mb-6 text-slate-800"
+        th:text="${editMode} ? 'Editar Mock' : #{page.newMock.title}">
+    </h1>
+
+    <form th:action="${editMode} ? @{/mocks/{id}(id=${mock.id})} : @{/mocks}"
+          th:object="${mock}"
+          method="post"
+          class="bg-white p-6 rounded-lg shadow-lg space-y-6">
+
+
+        <div th:if="${!#lists.isEmpty(projects)}">
+            <label class="block font-semibold mb-1" th:text="#{form.project.label}"></label>
+            <select name="projectId"
+                    id="projectSelect"
+                    class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="" th:text="#{form.project.select}"></option>
+
+                <option th:each="project : ${projects}"
+                        th:value="${project.id}"
+                        th:text="${project.name}">
+                </option>
+
+                <option value="__new__" th:text="#{form.project.add}"></option>
+            </select>
+        </div>
+
+        <div id="newProjectBox"
+             th:classappend="${#lists.isEmpty(projects)} ? '' : 'hidden'"
+             class="border rounded p-4 bg-slate-50">
+            <p class="font-semibold mb-2 text-slate-700" th:text="#{form.project.new.title}"></p>
+
+            <input type="text"
+                   name="newProjectName"
+                   th:placeholder="#{form.project.new.name}"
+                   class="w-full border px-3 py-2 rounded mb-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+
+            <textarea name="newProjectDescription"
+                      th:placeholder="#{form.project.new.description}"
+                      class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.mock.name.label}"></label>
+            <input th:field="*{name}"
+                   th:placeholder="#{form.mock.name.placeholder}"
+                   id="mockName"
+                   class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.endpoint.label}"></label>
+            <div class="grid grid-cols-3 gap-4">
+                <select th:field="*{method}" id="methodSelect"
+                        class="border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                    <option value="OPTIONS">OPTIONS</option>
+                </select>
+                <input th:field="*{path}"
+                       th:placeholder="#{form.path.placeholder}"
+                       id="pathInput"
+                       class="col-span-2 border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.response.config.label}"></label>
+            <div class="grid grid-cols-3 gap-4">
+                <select th:field="*{statusCode}" id="statusSelect"
+                        class="border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="100">100 Continue</option>
+                    <option value="200">200 OK</option>
+                    <option value="201">201 Created</option>
+                    <option value="204">204 No Content</option>
+                    <option value="400">400 Bad Request</option>
+                    <option value="404">404 Not Found</option>
+                    <option value="500">500 Internal Server Error</option>
+                </select>
+
+                <select th:field="*{contentType}"
+                        class="border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="application/json">application/json</option>
+                    <option value="text/plain">text/plain</option>
+                    <option value="application/xml">application/xml</option>
+                    <option value="text/html">text/html</option>
+                </select>
+
+                <input type="number" th:field="*{delaySeconds}"
+                       min="0"
+                       max="60"
+                       class="border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                       th:placeholder="#{form.delay.placeholder}">
+            </div>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.response.body.label}"></label>
+            <textarea th:field="*{responseBody}"
+                      id="responseBody"
+                      rows="8"
+                      th:placeholder="#{form.response.body.placeholder}"
+                      class="w-full border px-3 py-2 rounded font-mono text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+            <p class="text-xs text-slate-500 mt-1" th:text="#{form.response.body.hint}"></p>
+        </div>
+
+        <div class="border rounded p-4">
+            <label class="font-semibold mb-2 block" th:text="#{form.headers.label}"></label>
+            <div id="headersContainer" class="space-y-2 mb-3">
+            </div>
+            <button type="button" onclick="addHeader()"
+                    class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <span th:text="#{form.headers.add}"></span>
+            </button>
+        </div>
+
+        <div class="border rounded p-4 bg-slate-50">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox"
+                       th:field="*{jwtProtected}"
+                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                <span class="font-semibold text-slate-700" th:text="#{form.jwt.label}"></span>
+            </label>
+
+            <p class="text-xs text-slate-500 mt-2" th:text="#{form.jwt.hint}">
+                <span th:remove="tag">Si se activa, el endpoint requerirá el header</span>
+                <code class="bg-slate-200 px-1 rounded">Authorization: Bearer &lt;token&gt;</code>
+            </p>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.expiration.label}"></label>
+            <select th:field="*{expirationOption}"
+                    class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="ONE_YEAR" th:text="#{form.expiration.oneYear}"></option>
+                <option value="ONE_MONTH" th:text="#{form.expiration.oneMonth}"></option>
+                <option value="ONE_WEEK" th:text="#{form.expiration.oneWeek}"></option>
+                <option value="ONE_DAY" th:text="#{form.expiration.oneDay}"></option>
+                <option value="ONE_HOUR" th:text="#{form.expiration.oneHour}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1" th:text="#{form.description.label}"></label>
+            <textarea th:field="*{description}"
+                      rows="3"
+                      th:placeholder="#{form.description.placeholder}"
+                      class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-4 pt-4">
+            <a th:href="@{/projects}"
+               class="px-6 py-2 border rounded text-slate-700 hover:bg-slate-50"
+               th:text="#{button.cancel}">
+            </a>
+            <button type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium transition duration-200" th:text="#{button.save}">
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const methodSelect = document.getElementById("methodSelect");
+    const statusSelect = document.getElementById("statusSelect");
+    const contentTypeSelect = document.querySelector("select[name='contentType']");
+    const responseBody = document.getElementById("responseBody");
+
+    const projectSelect = document.getElementById("projectSelect");
+    const newProjectBox = document.getElementById("newProjectBox");
+
+    const mockNameInput = document.getElementById("mockName");
+    const pathInput = document.getElementById("pathInput");
+
+    let pathTouched = false;
+
+    pathInput.addEventListener("input", () => {
+        pathTouched = true;
+    });
+
+    mockNameInput.addEventListener("input", () => {
+        if (pathTouched) return;
+
+        const raw = mockNameInput.value.trim();
+        if (!raw) {
+            pathInput.value = "";
+            return;
+        }
+
+        const slug = raw
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+        pathInput.value = `/${slug}`;
+    });
+
+    if (projectSelect) {
+        projectSelect.addEventListener("change", () => {
+            if (projectSelect.value === "__new__") {
+                newProjectBox.classList.remove("hidden");
+                projectSelect.value = "";
+            } else {
+                newProjectBox.classList.add("hidden");
+            }
+        });
+    }
+
+    function addHeader() {
+        const container = document.getElementById("headersContainer");
+        const headerId = Date.now();
+
+        const headerRow = document.createElement("div");
+        headerRow.className = "flex gap-2 items-center";
+        headerRow.dataset.headerId = headerId;
+
+        headerRow.innerHTML = `
+            <input
+                class="w-2/5 border px-3 py-2 rounded header-key focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="${/*[[#{form.headers.key.placeholder}]]*/'Header (ej: Authorization)'}"
+                oninput="updateHeaderName(this)">
+            <span class="text-slate-400">:</span>
+            <input
+                class="w-2/5 border px-3 py-2 rounded header-value focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="${/*[[#{form.headers.value.placeholder}]]*/'Valor (ej: Bearer 123)'}">
+            <button
+                type="button"
+                onclick="removeHeader(${headerId})"
+                class="text-red-500 hover:text-red-700 p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        `;
+
+        container.appendChild(headerRow);
+    }
+
+    function updateHeaderName(inputElement) {
+        const headerRow = inputElement.closest('div[data-header-id]');
+        const valueInput = headerRow.querySelector('.header-value');
+        const key = inputElement.value.trim();
+
+        if (key) {
+            valueInput.name = `headers[${key}]`;
+        } else {
+            valueInput.removeAttribute('name');
+        }
+    }
+
+    function removeHeader(headerId) {
+        const headerRow = document.querySelector(`div[data-header-id="${headerId}"]`);
+        if (headerRow) {
+            headerRow.remove();
+        }
+    }
+
+    methodSelect.addEventListener("change", () => {
+        if (responseBody.value.trim().length > 0) {
+            const userConfirmed = confirm(/*[[#{confirm.method.change}]]*/ '¿Cambiar el método HTTP reseteará el cuerpo de respuesta. ¿Continuar?');
+            if (!userConfirmed) {
+                methodSelect.value = methodSelect.dataset.previousValue || "GET";
+                return;
+            }
+        }
+
+        methodSelect.dataset.previousValue = methodSelect.value;
+        let status = 200;
+        let example = null;
+        let contentType = "application/json";
+
+        switch (methodSelect.value) {
+            case "GET":
+                status = 200;
+                example = {
+                    data: [
+                        { id: 1, name: "Ejemplo 1" },
+                        { id: 2, name: "Ejemplo 2" }
+                    ],
+                    success: true,
+                    message: "GET mock response",
+                    timestamp: new Date().toISOString()
+                };
+                break;
+
+            case "POST":
+                status = 201;
+                example = {
+                    id: Math.floor(Math.random() * 1000),
+                    message: "Resource created successfully",
+                    success: true,
+                    timestamp: new Date().toISOString()
+                };
+                break;
+
+            case "PUT":
+                status = 200;
+                example = {
+                    id: 1,
+                    message: "Resource updated successfully",
+                    success: true,
+                    timestamp: new Date().toISOString()
+                };
+                break;
+
+            case "PATCH":
+                status = 200;
+                example = {
+                    id: 1,
+                    message: "Resource partially updated",
+                    success: true,
+                    timestamp: new Date().toISOString()
+                };
+                break;
+
+            case "DELETE":
+                status = 204;
+                example = null;
+                break;
+
+            case "OPTIONS":
+                status = 200;
+                contentType = "application/json";
+                example = {
+                    allow: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+                    "access-control-allow-methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD"
+                };
+                break;
+        }
+
+        statusSelect.value = status;
+        contentTypeSelect.value = contentType;
+
+        if (methodSelect.value === "DELETE" && status === 204) {
+            responseBody.value = "";
+        } else {
+            responseBody.value = example ? JSON.stringify(example, null, 2) : "";
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        addHeader();
+        const firstHeaderKey = document.querySelector('.header-key');
+        if (firstHeaderKey) {
+            firstHeaderKey.value = "Content-Type";
+            updateHeaderName(firstHeaderKey);
+            const firstHeaderValue = document.querySelector('.header-value');
+            if (firstHeaderValue) {
+                firstHeaderValue.value = "application/json";
+            }
+        }
+
+        methodSelect.dataset.previousValue = methodSelect.value;
+    });
+
+    /*<![CDATA[*/
+    const existingHeaders = /*[[${mock.headers}]]*/ {};
+
+    Object.entries(existingHeaders).forEach(([key, value]) => {
+        if (key.startsWith("X-Mock-Token")) return;
+
+        addHeader();
+        const lastRow = document.querySelector("#headersContainer > div:last-child");
+        lastRow.querySelector(".header-key").value = key;
+        updateHeaderName(lastRow.querySelector(".header-key"));
+        lastRow.querySelector(".header-value").value = value;
+    });
+    /*]]>*/
+</script>
+
+</body>
+</html>
