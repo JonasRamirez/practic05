@@ -14,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Set;
 
 @SpringBootApplication
-public class practica5Application {
+public class Practica5Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(practica5Application.class, args);
+		SpringApplication.run(Practica5Application.class, args);
 	}
 
 	@Bean
