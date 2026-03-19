@@ -36,11 +36,11 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.spring.practica1.practica5Application'
+    mainClass = 'com.spring.practica1.Practica5Application'
 }
 
 springBoot {
-	mainClass = 'com.spring.practica1.practica5Application'
+	mainClass = 'com.spring.practica1.Practica5Application'
 }
 
 tasks.named('test') {
