@@ -1,0 +1,10 @@
+build
+.gradle
+node_modules
+.git
+.idea
+*.iml
+*.log
+data/h2
+docker-compose.yml
+haproxy
