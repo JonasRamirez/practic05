@@ -54,9 +54,6 @@ services:
   haproxy:
       image: haproxy:latest
       container_name: practica5-haproxy
-      ports:
-        - "80:80"
-        - "443:443"
       volumes:
         - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
         - ./certs:/etc/ssl/private
@@ -70,5 +67,27 @@ services:
       networks:
         - practica5-net
 
+  caddy:
+      image: caddy:latest
+      container_name: practica5-caddy
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - ./Caddyfile:/etc/caddy/Caddyfile
+        - caddy_data:/data
+        - caddy_config:/config
+      depends_on:
+        - haproxy
+      mem_limit: 64m
+      mem_reservation: 48m
+      cpus: "0.15"
+      networks:
+        - practica5-net
+
 networks:
   practica5-net:
+
+volumes:
+  caddy_data:
+  caddy_config:
