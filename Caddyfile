@@ -1,0 +1,8 @@
+{
+    email aw3r12345tres@gmail.com
+}
+
+awreryes.rocks {
+    tls /etc/letsencrypt/live/awreryes.rocks/fullchain.pem /etc/letsencrypt/live/awreryes.rocks/privkey.pem
+    reverse_proxy haproxy:80
+}

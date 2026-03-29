@@ -1,7 +1,6 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   db:
     image: oscarfonts/h2
     restart: unless-stopped
@@ -9,85 +8,82 @@ services:
       H2_OPTIONS: "-tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists -web -webAllowOthers -webPort 81 -baseDir /opt/h2-data"
     volumes:
       - ./data/h2:/opt/h2-data
-    mem_limit: 128m
-    mem_reservation: 96m
     networks:
       - practica5-net
 
-  app1: &app_service
+  app1:
     build: .
-    environment: &app_env
+    environment:
       APP_PORT: 8080
       INSTANCE_ID: app1
       APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
       APP_DB_DRIVER: org.h2.Driver
       APP_DB_USERNAME: admin
       APP_DB_PASSWORD: se
-      SPRING_PROFILES_ACTIVE: prod
-      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=25 -XX:+ExitOnOutOfMemoryError -XX:MaxMetaspaceSize=128m -Xss256k"
     ports:
       - "8081:8080"
     depends_on:
       - db
-    mem_limit: 256m
-    mem_reservation: 192m
-    cpus: "0.35"
     networks:
       - practica5-net
 
   app2:
-    <<: *app_service
+    build: .
     environment:
-      <<: *app_env
       INSTANCE_ID: app2
+      APP_PORT: 8080
+      APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
+      APP_DB_DRIVER: org.h2.Driver
+      APP_DB_USERNAME: admin
+      APP_DB_PASSWORD: se
     ports:
       - "8082:8080"
+    depends_on:
+      - db
+    networks:
+      - practica5-net
 
   app3:
-    <<: *app_service
+    build: .
     environment:
-      <<: *app_env
       INSTANCE_ID: app3
+      APP_PORT: 8080
+      APP_DB_URL: jdbc:h2:tcp://db:9092/practica5db;MODE=PostgreSQL
+      APP_DB_DRIVER: org.h2.Driver
+      APP_DB_USERNAME: admin
+      APP_DB_PASSWORD: se
     ports:
       - "8083:8080"
+    depends_on:
+      - db
+    networks:
+      - practica5-net
 
   haproxy:
-      image: haproxy:latest
-      container_name: practica5-haproxy
-      volumes:
-        - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-        - ./certs:/etc/ssl/private
-      depends_on:
-        - app1
-        - app2
-        - app3
-      mem_limit: 64m
-      mem_reservation: 48m
-      cpus: "0.15"
-      networks:
-        - practica5-net
+    image: haproxy:latest
+    container_name: practica5-haproxy
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - app1
+      - app2
+      - app3
+    networks:
+      - practica5-net
 
   caddy:
-      image: caddy:latest
-      container_name: practica5-caddy
-      ports:
-        - "80:80"
-        - "443:443"
-      volumes:
-        - ./Caddyfile:/etc/caddy/Caddyfile
-        - caddy_data:/data
-        - caddy_config:/config
-      depends_on:
-        - haproxy
-      mem_limit: 64m
-      mem_reservation: 48m
-      cpus: "0.15"
-      networks:
-        - practica5-net
+    image: caddy:latest
+    container_name: practica5-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /etc/letsencrypt/live/awreryes.rocks:/etc/letsencrypt/live/awreryes.rocks:ro
+    depends_on:
+      - haproxy
+    networks:
+      - practica5-net
 
 networks:
   practica5-net:
-
-volumes:
-  caddy_data:
-  caddy_config:

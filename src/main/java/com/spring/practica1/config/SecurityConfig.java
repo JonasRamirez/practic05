@@ -28,6 +28,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/instance").permitAll()
                         .requestMatchers("/*/mock/**").permitAll()
                         .requestMatchers("/login", "/h2-console/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
