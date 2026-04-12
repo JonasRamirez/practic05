@@ -28,7 +28,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/instance").permitAll()
+                        .requestMatchers("/session-info").authenticated()
                         .requestMatchers("/*/mock/**").permitAll()
                         .requestMatchers("/login", "/h2-console/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

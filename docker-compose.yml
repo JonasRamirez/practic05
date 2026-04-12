@@ -3,6 +3,7 @@ version: "3.8"
 services:
   db:
     image: oscarfonts/h2
+    container_name: practica5-db
     restart: unless-stopped
     environment:
       H2_OPTIONS: "-tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists -web -webAllowOthers -webPort 81 -baseDir /opt/h2-data"
@@ -11,8 +12,17 @@ services:
     networks:
       - practica5-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: practica5-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    networks:
+      - practica5-net
+
   app1:
     build: .
+    restart: unless-stopped
     environment:
       APP_PORT: 8080
       INSTANCE_ID: app1
@@ -20,15 +30,19 @@ services:
       APP_DB_DRIVER: org.h2.Driver
       APP_DB_USERNAME: admin
       APP_DB_PASSWORD: se
+      APP_SESSION_REDIS_HOST: redis
+      APP_SESSION_REDIS_PORT: 6379
     ports:
       - "8081:8080"
     depends_on:
       - db
+      - redis
     networks:
       - practica5-net
 
   app2:
     build: .
+    restart: unless-stopped
     environment:
       INSTANCE_ID: app2
       APP_PORT: 8080
@@ -36,15 +50,19 @@ services:
       APP_DB_DRIVER: org.h2.Driver
       APP_DB_USERNAME: admin
       APP_DB_PASSWORD: se
+      APP_SESSION_REDIS_HOST: redis
+      APP_SESSION_REDIS_PORT: 6379
     ports:
       - "8082:8080"
     depends_on:
       - db
+      - redis
     networks:
       - practica5-net
 
   app3:
     build: .
+    restart: unless-stopped
     environment:
       INSTANCE_ID: app3
       APP_PORT: 8080
@@ -52,16 +70,20 @@ services:
       APP_DB_DRIVER: org.h2.Driver
       APP_DB_USERNAME: admin
       APP_DB_PASSWORD: se
+      APP_SESSION_REDIS_HOST: redis
+      APP_SESSION_REDIS_PORT: 6379
     ports:
       - "8083:8080"
     depends_on:
       - db
+      - redis
     networks:
       - practica5-net
 
   haproxy:
     image: haproxy:latest
     container_name: practica5-haproxy
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.spring.practica1.practica5ApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-03-27T00:12:57.911Z" hostname="AWERYES" time="14.417">
+<testsuite name="com.spring.practica1.practica5ApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-04-12T17:17:15.749Z" hostname="AWERYES" time="17.071">
   <properties/>
-  <testcase name="contextLoads()" classname="com.spring.practica1.practica5ApplicationTests" time="0.796"/>
-  <system-out><![CDATA[20:12:58.478 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.spring.practica1.practica5ApplicationTests]: practica5ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-20:12:58.864 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.spring.practica1.Practica5Application for test class com.spring.practica1.practica5ApplicationTests
+  <testcase name="contextLoads()" classname="com.spring.practica1.practica5ApplicationTests" time="0.943"/>
+  <system-out><![CDATA[13:17:16.225 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.spring.practica1.practica5ApplicationTests]: practica5ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:17:16.547 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.spring.practica1.Practica5Application for test class com.spring.practica1.practica5ApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -14,18 +14,26 @@
 
  :: Spring Boot ::                (v4.0.2)
 
-2026-03-26T20:12:59.954-04:00  INFO 9836 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : Starting practica5ApplicationTests using Java 21.0.5 with PID 9836 (started by dell in C:\Users\dell\Desktop\practica5)
-2026-03-26T20:12:59.957-04:00  INFO 9836 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : No active profile set, falling back to 1 default profile: "default"
-2026-03-26T20:13:01.730-04:00  INFO 9836 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-26T20:13:01.892-04:00  INFO 9836 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 135 ms. Found 4 JPA repository interfaces.
-2026-03-26T20:13:03.054-04:00  INFO 9836 --- [    Test worker] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-26T20:13:03.271-04:00  INFO 9836 --- [    Test worker] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-26T20:13:04.619-04:00  INFO 9836 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-26T20:13:04.703-04:00  INFO 9836 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-26T20:13:05.100-04:00  INFO 9836 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2026-03-26T20:13:05.103-04:00  INFO 9836 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-26T20:13:05.153-04:00  WARN 9836 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-26T20:13:05.207-04:00  INFO 9836 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-04-12T13:17:17.575-04:00  INFO 31428 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : Starting practica5ApplicationTests using Java 21.0.10 with PID 31428 (started by dell in C:\Users\dell\Documents\GitHub\practic05)
+2026-04-12T13:17:17.578-04:00  INFO 31428 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2026-04-12T13:17:20.112-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-12T13:17:20.116-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-12T13:17:20.459-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 318 ms. Found 4 JPA repository interfaces.
+2026-04-12T13:17:20.553-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-12T13:17:20.556-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-12T13:17:20.587-04:00  INFO 31428 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.spring.practica1.domain.repository.MockEndpointRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-12T13:17:20.587-04:00  INFO 31428 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.spring.practica1.domain.repository.ProjectRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-12T13:17:20.589-04:00  INFO 31428 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.spring.practica1.domain.repository.RoleRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-12T13:17:20.590-04:00  INFO 31428 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.spring.practica1.domain.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-12T13:17:20.590-04:00  INFO 31428 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 Redis repository interfaces.
+2026-04-12T13:17:21.784-04:00  INFO 31428 --- [    Test worker] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-12T13:17:21.933-04:00  INFO 31428 --- [    Test worker] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-04-12T13:17:23.243-04:00  INFO 31428 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-12T13:17:23.318-04:00  INFO 31428 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-12T13:17:23.730-04:00  INFO 31428 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-04-12T13:17:23.735-04:00  INFO 31428 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-12T13:17:23.791-04:00  WARN 31428 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-12T13:17:23.841-04:00  INFO 31428 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [jdbc:h2:mem:testdb]
 	Database driver: H2 JDBC Driver
 	Database dialect: H2Dialect
@@ -37,12 +45,13 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-03-26T20:13:07.900-04:00  INFO 9836 --- [    Test worker] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-26T20:13:08.023-04:00  INFO 9836 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-26T20:13:08.221-04:00  INFO 9836 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-26T20:13:08.788-04:00  INFO 9836 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-26T20:13:08.836-04:00  WARN 9836 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-26T20:13:10.261-04:00  INFO 9836 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : Started practica5ApplicationTests in 10.964 seconds (process running for 14.442)
+2026-04-12T13:17:26.368-04:00  INFO 31428 --- [    Test worker] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-12T13:17:26.506-04:00  INFO 31428 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-12T13:17:26.697-04:00  INFO 31428 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-12T13:17:27.273-04:00  INFO 31428 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-12T13:17:27.328-04:00  WARN 31428 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-12T13:17:30.193-04:00  INFO 31428 --- [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-04-12T13:17:30.327-04:00  INFO 31428 --- [    Test worker] c.s.practica1.practica5ApplicationTests  : Started practica5ApplicationTests in 13.38 seconds (process running for 16.695)
 ]]></system-out>
   <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
 WARNING: A Java agent has been loaded dynamically (C:\Users\dell\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.17.8\f09415827a71be7ed621c7bd02550678f28bc81c\byte-buddy-agent-1.17.8.jar)
